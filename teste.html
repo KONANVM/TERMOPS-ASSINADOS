@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Teste Apps Script</title></head>
+<body>
+<h2>Teste de Envio para Apps Script</h2>
+<div id="result">Aguardando...</div>
+<script>
+var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby6Aq-4q48rK8Uosez9oelYqfrAblIgzqUEWPZx9mHt58BN2qeYkhLIjQpQbWh9UOMT/exec';
+
+// Testar GET primeiro
+fetch(SCRIPT_URL)
+  .then(function(r) { return r.json(); })
+  .then(function(d) {
+    document.getElementById('result').innerHTML = '<pre>GET OK: ' + JSON.stringify(d, null, 2) + '</pre>';
+  })
+  .catch(function(e) {
+    document.getElementById('result').innerHTML = 'GET Error: ' + e.message;
+  });
+
+// Aguardar 2s e fazer POST de teste
+setTimeout(function() {
+  var payload = JSON.stringify({
+    nome: 'Teste Automatico GitHub Pages',
+    cpf: '999.999.999-99',
+    email: 'teste@githubpages.com',
+    cidade: 'Test City',
+    data: '2026-04-17',
+    assinatura: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    timestamp: new Date().toLocaleString('pt-BR')
+  });
+  
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: payload
+  }).then(function(r) {
+    document.getElementById('result').innerHTML += '<br>POST sent: type=' + r.type + ' status=' + r.status;
+  }).catch(function(e) {
+    document.getElementById('result').innerHTML += '<br>POST Error: ' + e.message;
+  });
+}, 2000);
+</script>
+</body>
+</html>
